@@ -38,6 +38,7 @@ jobs:
           url: 'jdbc:postgresql://postgres-dev:5432/dev_db' 
           username: 'dev_user'
           password: 'dev_password'
+          searchPath: 'db' # 👈 ADD THIS LINE HERE
 
 
   # --- QA STAGE: Runs only if the Dev container test succeeds ---
