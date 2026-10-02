@@ -3,10 +3,10 @@
     xmlns="http://liquibase.org"
     xmlns:xsi="http://w3.org"
     xsi:schemaLocation="http://liquibase.org
-    http://liquibase.org/dbchangelog-latest.xsd">
+                        http://liquibase.org/dbchangelog-4.25.xsd">
 
     <!-- ChangeSet 1: Create a users table -->
-    <changeSet id="20261002-create-users" author="your_name">
+    <changeSet id="20261002-create-users" author="bseshannagari">
         <createTable tableName="users">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
@@ -19,7 +19,7 @@
     </changeSet>
 
     <!-- ChangeSet 2: Insert a test system user -->
-    <changeSet id="20261002-insert-system-user" author="your_name">
+    <changeSet id="20261002-insert-system-user" author="bseshannagari">
         <insert tableName="users">
             <column name="id" value="1"/>
             <column name="email" value="admin@example.com"/>
