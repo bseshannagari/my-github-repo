@@ -9,6 +9,7 @@ jobs:
   deploy-dev:
     name: Test in Dev Container
     runs-on: ubuntu-latest
+    environment: Dev  # 👈 1. Connects this job to your GitHub Dev Environment settings
     
     # This automatically spawns a private Postgres instance inside GitHub for this job
     services:
@@ -35,10 +36,13 @@ jobs:
         with:
           changelogFile: 'db/changelog.yml'
           # CHANGED: 'localhost' updated to 'postgres-dev'
-          url: 'jdbc:postgresql://postgres-dev:5432/dev_db' 
-          username: 'dev_user'
-          password: 'dev_password'
+          #url: 'jdbc:postgresql://postgres-dev:5432/dev_db' 
+          #username: 'dev_user'
+          #password: 'dev_password'
           #searchPath: 'db' # 👈 ADD THIS LINE HERE
+          url: ${{ secrets.DB_URL }}        # 👈 2. Dynamically pulls from Dev Secrets
+          username: ${{ secrets.DB_USERNAME }}  # 👈 3. Dynamically pulls from Dev Secrets
+          password: ${{ secrets.DB_PASSWORD }}  # 👈 4. Dynamically pulls from Dev Secrets
 
 
   # --- QA STAGE: Runs only if the Dev container test succeeds ---
