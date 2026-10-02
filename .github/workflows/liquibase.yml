@@ -33,7 +33,7 @@ jobs:
       - name: Run Liquibase on Temp Dev DB
         uses: liquibase-github-actions/update@v4.25.0
         with:
-          changelogFile: 'db/changelog.sql'
+          changelogFile: 'db/changelog.yml'
           # CHANGED: 'localhost' updated to 'postgres-dev'
           url: 'jdbc:postgresql://postgres-dev:5432/dev_db' 
           username: 'dev_user'
