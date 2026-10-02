@@ -33,12 +33,12 @@ jobs:
       - name: Run Liquibase on Temp Dev DB
         uses: liquibase-github-actions/update@v4.25.0
         with:
-          changelogFile: 'changelog.sql'
+          changelogFile: 'db/changelog.xml'
           # CHANGED: 'localhost' updated to 'postgres-dev'
           url: 'jdbc:postgresql://postgres-dev:5432/dev_db' 
           username: 'dev_user'
           password: 'dev_password'
-          searchPath: 'db' # 👈 ADD THIS LINE HERE
+          #searchPath: 'db' # 👈 ADD THIS LINE HERE
 
 
   # --- QA STAGE: Runs only if the Dev container test succeeds ---
