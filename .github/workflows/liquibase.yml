@@ -34,9 +34,11 @@ jobs:
         uses: liquibase-github-actions/update@v4.25.0
         with:
           changelogFile: 'db/changelog.xml'
-          url: 'jdbc:postgresql://localhost:5432/dev_db' # Maps to the container above
+          # CHANGED: 'localhost' updated to 'postgres-dev'
+          url: 'jdbc:postgresql://postgres-dev:5432/dev_db' 
           username: 'dev_user'
           password: 'dev_password'
+
 
   # --- QA STAGE: Runs only if the Dev container test succeeds ---
   deploy-qa:
