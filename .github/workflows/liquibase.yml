@@ -9,7 +9,7 @@ jobs:
   deploy-dev:
     name: Test in Dev Container
     runs-on: ubuntu-latest
-    environment: Dev  # 👈 1. Connects this job to your GitHub Dev Environment settings
+    environment: DEV  # 👈 1. Connects this job to your GitHub Dev Environment settings
     
     # This automatically spawns a private Postgres instance inside GitHub for this job
     services:
