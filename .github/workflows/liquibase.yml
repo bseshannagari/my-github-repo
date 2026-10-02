@@ -1,17 +1,16 @@
-name: DB Pipeline
+name: Secure Database Release Pipeline
 
 on:
-  push:
-    branches: [ main ]
+  # Triggers the pipeline when you manually click "Run workflow"
+  workflow_dispatch:
 
 jobs:
-  # --- DEV STAGE: Uses a fresh, temporary cloud database ---
+  # --- STAGE 1: DEV SANDBOX TEST ---
   deploy-dev:
     name: Test in Dev Container
     runs-on: ubuntu-latest
-    environment: DEV  # 👈 1. Connects this job to your GitHub Dev Environment settings
+    environment: DEV
     
-    # This automatically spawns a private Postgres instance inside GitHub for this job
     services:
       postgres-dev:
         image: postgres:15
@@ -35,22 +34,17 @@ jobs:
         uses: liquibase-github-actions/update@v4.25.0
         with:
           changelogFile: 'db/changelog.yml'
-          # CHANGED: 'localhost' updated to 'postgres-dev'
-          #url: 'jdbc:postgresql://postgres-dev:5432/dev_db' 
-          #username: 'dev_user'
-          #password: 'dev_password'
-          #searchPath: 'db' # 👈 ADD THIS LINE HERE
-          url: ${{ secrets.DB_URL }}        # 👈 2. Dynamically pulls from Dev Secrets
-          username: ${{ secrets.DB_USERNAME }}  # 👈 3. Dynamically pulls from Dev Secrets
-          password: ${{ secrets.DB_PASSWORD }}  # 👈 4. Dynamically pulls from Dev Secrets
+          url: ${{ secrets.DB_URL }}
+          username: ${{ secrets.DB_USERNAME }}
+          password: ${{ secrets.DB_PASSWORD }}
 
-
-  # --- QA STAGE: Runs only if the Dev container test succeeds ---
+  # --- STAGE 2: QA DEPLOYMENT (Blocked if DEV Fails) ---
   deploy-qa:
     name: Deploy to AWS Aurora QA
     runs-on: ubuntu-latest
-    needs: deploy-dev
-    environment: QA
+    needs: deploy-dev    # 👈 CRUCIAL: Blocks QA from executing unless DEV finishes Green
+    environment: QA      # 👈 Triggers the manual approval setting on GitHub
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -58,7 +52,7 @@ jobs:
       - name: Run Liquibase QA Update
         uses: liquibase-github-actions/update@v4.25.0
         with:
-          changelogFile: 'db/changelog.xml'
+          changelogFile: 'db/changelog.yml'
           url: ${{ secrets.DB_URL }}
           username: ${{ secrets.DB_USERNAME }}
           password: ${{ secrets.DB_PASSWORD }}
